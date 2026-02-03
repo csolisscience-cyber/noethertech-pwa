@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Noether Tech | Panel</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0B1B3A" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div>
+        <div class="brand-title">Noether Tech</div>
+        <div class="brand-sub">Panel interno</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span id="netBadge" class="badge">Offline</span>
+      <button id="btnSync" class="btn ghost" title="Sincronizar">Sync</button>
+      <button id="btnLogout" class="btn ghost" title="Cerrar sesión">Salir</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- LOGIN -->
+    <section id="viewLogin" class="card">
+      <h2>Acceso</h2>
+      <p class="muted">Ingresa tu PIN para continuar.</p>
+      <div class="row">
+        <input id="pin" type="password" inputmode="numeric" placeholder="PIN" class="input" />
+        <button id="btnLogin" class="btn primary">Entrar</button>
+      </div>
+      <div id="loginMsg" class="msg"></div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="viewDash" class="hidden">
+      <div class="grid">
+        <button class="tile" data-view="grupos">
+          <div class="tile-title">Grupos</div>
+          <div class="tile-sub">Ver grupos y listas</div>
+        </button>
+
+        <button class="tile" data-view="asistencia">
+          <div class="tile-title">Pasar lista</div>
+          <div class="tile-sub">Registro por fecha</div>
+        </button>
+
+        <button id="tileAdmin" class="tile hidden" data-view="admin">
+          <div class="tile-title">Administración</div>
+          <div class="tile-sub">Altas e inscripciones</div>
+        </button>
+
+        <button class="tile" data-view="reportes">
+          <div class="tile-title">Reportes</div>
+          <div class="tile-sub">Pagos y adeudos</div>
+        </button>
+      </div>
+
+      <section class="card mt">
+        <h3>Resumen</h3>
+        <div id="resumen" class="muted">—</div>
+      </section>
+    </section>
+
+    <!-- GRUPOS -->
+    <section id="viewGrupos" class="card hidden">
+      <div class="card-head">
+        <h3>Grupos</h3>
+        <button class="btn ghost" data-back>Volver</button>
+      </div>
+      <div class="row">
+        <select id="selGrupo" class="input"></select>
+        <button id="btnCargarRoster" class="btn primary">Cargar lista</button>
+      </div>
+      <div id="roster" class="table-wrap"></div>
+    </section>
+
+    <!-- ASISTENCIA -->
+    <section id="viewAsistencia" class="card hidden">
+      <div class="card-head">
+        <h3>Pasar lista</h3>
+        <button class="btn ghost" data-back>Volver</button>
+      </div>
+
+      <div class="row">
+        <select id="selGrupoA" class="input"></select>
+        <input id="fechaClase" type="date" class="input" />
+        <button id="btnCargarA" class="btn primary">Cargar</button>
+      </div>
+
+      <div id="asistenciaLista" class="table-wrap"></div>
+
+      <div class="row end mt">
+        <button id="btnGuardarAsistencia" class="btn primary">Guardar asistencia</button>
+      </div>
+
+      <div class="muted small mt">
+        Si estás offline, se guarda en cola y se sincroniza con “Sync”.
+      </div>
+      <div id="asistMsg" class="msg"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="viewAdmin" class="card hidden">
+      <div class="card-head">
+        <h3>Administración</h3>
+        <button class="btn ghost" data-back>Volver</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="alumno">Alumno</button>
+        <button class="tab" data-tab="grupo">Grupo</button>
+        <button class="tab" data-tab="inscribir">Inscribir</button>
+        <button class="tab" data-tab="pago">Pago</button>
+        <button class="tab" data-tab="usuario">Usuario</button>
+      </div>
+
+      <div id="tabAlumno" class="tabpane">
+        <div class="grid2">
+          <input id="aClave" class="input" placeholder="Clave alumno (A-001)" />
+          <input id="aAp" class="input" placeholder="Apellidos" />
+          <input id="aNom" class="input" placeholder="Nombres" />
+          <input id="aMail" class="input" placeholder="Correo" />
+          <input id="aTel" class="input" placeholder="Teléfono" />
+          <select id="aEst" class="input">
+            <option value="activo">activo</option>
+            <option value="baja">baja</option>
+            <option value="egresado">egresado</option>
+          </select>
+        </div>
+        <div class="row end mt">
+          <button id="btnCrearAlumno" class="btn primary">Crear alumno</button>
+        </div>
+        <div id="adminMsgAlumno" class="msg"></div>
+      </div>
+
+      <div id="tabGrupo" class="tabpane hidden">
+        <div class="grid2">
+          <input id="gClave" class="input" placeholder="Clave grupo (G-...)" />
+          <input id="gCurso" class="input" placeholder="Clave curso (NT-...)" />
+          <input id="gPeriodo" class="input" placeholder="Periodo (2026-1)" />
+          <input id="gIni" type="date" class="input" />
+          <input id="gFin" type="date" class="input" />
+          <input id="gCupo" type="number" class="input" placeholder="Cupo" />
+          <input id="gSede" class="input" placeholder="Sede" />
+          <select id="gEst" class="input">
+            <option value="abierto">abierto</option>
+            <option value="cerrado">cerrado</option>
+            <option value="cancelado">cancelado</option>
+          </select>
+        </div>
+        <div class="row end mt">
+          <button id="btnCrearGrupo" class="btn primary">Crear grupo</button>
+        </div>
+        <div id="adminMsgGrupo" class="msg"></div>
+      </div>
+
+      <div id="tabInscribir" class="tabpane hidden">
+        <div class="grid2">
+          <input id="iGrupo" class="input" placeholder="Clave grupo" />
+          <input id="iAlumno" class="input" placeholder="Clave alumno" />
+        </div>
+        <div class="row end mt">
+          <button id="btnInscribir" class="btn primary">Inscribir</button>
+        </div>
+        <div id="adminMsgIns" class="msg"></div>
+      </div>
+
+      <div id="tabPago" class="tabpane hidden">
+        <div class="grid2">
+          <input id="pIdIns" class="input" placeholder="ID inscripción" />
+          <input id="pMonto" type="number" class="input" placeholder="Monto" />
+          <select id="pMet" class="input">
+            <option value="efectivo">efectivo</option>
+            <option value="transferencia">transferencia</option>
+            <option value="tarjeta">tarjeta</option>
+            <option value="otro">otro</option>
+          </select>
+          <select id="pEst" class="input">
+            <option value="pagado">pagado</option>
+            <option value="pendiente">pendiente</option>
+            <option value="devuelto">devuelto</option>
+          </select>
+          <input id="pRef" class="input" placeholder="Referencia" />
+          <input id="pNota" class="input" placeholder="Nota" />
+        </div>
+        <div class="row end mt">
+          <button id="btnPago" class="btn primary">Registrar pago</button>
+        </div>
+        <div id="adminMsgPago" class="msg"></div>
+      </div>
+
+      <div id="tabUsuario" class="tabpane hidden">
+        <div class="grid2">
+          <input id="uNombre" class="input" placeholder="Nombre" />
+          <select id="uRol" class="input">
+            <option value="PROFESOR">PROFESOR</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+          <input id="uPin" class="input" placeholder="PIN (se guardará hasheado)" />
+        </div>
+        <div class="row end mt">
+          <button id="btnUsuario" class="btn primary">Crear usuario</button>
+        </div>
+        <div id="adminMsgUser" class="msg"></div>
+      </div>
+    </section>
+
+    <!-- REPORTES -->
+    <section id="viewReportes" class="card hidden">
+      <div class="card-head">
+        <h3>Reportes</h3>
+        <button class="btn ghost" data-back>Volver</button>
+      </div>
+
+      <div class="row">
+        <button id="btnAdeudos" class="btn primary">Adeudos</button>
+        <input id="rDesde" type="date" class="input" />
+        <input id="rHasta" type="date" class="input" />
+        <button id="btnPagos" class="btn primary">Pagos</button>
+      </div>
+
+      <div id="reportOut" class="table-wrap"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
